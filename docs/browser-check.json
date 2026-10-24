@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "browser": "Chromium",
+  "external_services": "fixture responses only",
+  "checks": [
+    "discovery UI to API and SQLite",
+    "post rendered",
+    "analysis to pattern",
+    "Instagram selection and image URL persisted to review",
+    "export link available",
+    "X and Instagram discovery options",
+    "approval enabled publish control",
+    "editing revoked approval",
+    "all tabs rendered",
+    "390px layout no horizontal overflow",
+    "no JavaScript errors"
+  ],
+  "live_publication": false
+}

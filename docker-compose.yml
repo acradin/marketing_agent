@@ -1,0 +1,13 @@
+services:
+  engine:
+    build: .
+    ports:
+      - "127.0.0.1:8765:8765"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      VE_DATABASE_URL: sqlite:////app/data/viral.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
