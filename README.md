@@ -93,13 +93,22 @@ Copy-Item .env.example .env   # 처음 한 번만. 이후 .env에 키를 입력
 
 | 변수 | 설명 |
 |---|---|
-| `VE_LLM_BASE_URL` | OpenAI API 주소. 기본 `https://api.openai.com/v1` |
-| `VE_LLM_API_KEY` | **필수.** OpenAI API 키 |
+| `VE_LLM_BASE_URL` | OpenAI 호환 API 주소. 기본 `https://api.openai.com/v1` |
+| `VE_LLM_API_KEY` | **필수.** 사용하는 LLM 공급자의 API 키 |
 | `VE_LLM_MODEL` | 사용할 모델. 기본 `gpt-4.1-mini` |
+| `VE_LLM_JSON_MODE` | 요청에 `response_format`(JSON 모드)을 포함. 기본 `true`. 공급자가 거부하면 `false`로 설정하세요. 응답 구조 검증은 그대로 적용됩니다 |
 | `VE_ALLOW_PUBLIC_URLS` | 허용된 공개 영상 URL의 메타데이터 수집 활성화. 기본 `false` |
 | `VE_ENABLE_PUBLISHING` | Reddit·X·Instagram 외부 발행 활성화. 기본 `false` |
 
-> AI 분석·생성 시 원본 게시물 텍스트와 제품 설명이 OpenAI로 전송됩니다. Ollama는 더 이상 필요하지 않습니다.
+**Liner 사용 시** `.env`를 다음과 같이 설정합니다.
+
+```
+VE_LLM_BASE_URL=https://platform.liner.com/api/v1
+VE_LLM_MODEL=liner-mark
+VE_LLM_API_KEY=<Liner API 키>
+```
+
+> AI 분석·생성 시 원본 게시물 텍스트와 제품 설명이 설정한 LLM 공급자(기본 OpenAI)로 전송됩니다. Ollama는 더 이상 필요하지 않습니다.
 
 ### Reddit
 
