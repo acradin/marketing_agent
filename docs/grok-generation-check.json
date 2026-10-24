@@ -1,0 +1,10 @@
+{
+  "provider": "Liner",
+  "model": "x-ai/grok-4.7",
+  "validated": true,
+  "published": false,
+  "result": {
+    "title": "학생을 위한 강의 요약, Summrizei",
+    "text": "긴 강의에서 핵심을 놓치고 있지는 않나요? Summrizei는 학생을 위한 강의 요약 서비스입니다. 지금 Summrizei로 강의 요약을 시작해 보세요."
+  }
+}
