@@ -91,6 +91,11 @@ def create_app(settings=None, scheduling=True):
                 return JSONResponse({"detail": "X-Viral-Local: 1 header required"}, status_code=403)
         return await call_next(request)
 
+    from packages.core.instagram_auth import instagram_router
+    app.include_router(instagram_router(settings))
+    from packages.core.x_auth import x_router
+    app.include_router(x_router(settings))
+
     @app.get("/")
     def home():
         return FileResponse(Path(__file__).parents[1] / "web" / "index.html")
@@ -109,8 +114,8 @@ def create_app(settings=None, scheduling=True):
             return {"llm_configured": settings.llm_configured, "publishing_enabled": settings.enable_publishing, "adapters": [
                 {"platform": "reddit", "configured": bool(settings.reddit_token), "search": ["keyword"], "metrics": ["score", "comments"], "auth": "OAuth token", "constraints": "API access and subreddit permissions required; rate limits enforced by provider", **health("reddit")},
                 {"platform": "youtube", "configured": bool(settings.youtube_api_key), "search": ["keyword"], "metrics": ["views", "likes", "comments"], "auth": "API key", "constraints": "Provider quota applies; video search does not guarantee Shorts", **health("youtube")},
-                {"platform": "x", "configured": bool(settings.x_bearer_token), "search": ["keyword: last 7 days"], "metrics": ["likes", "comments", "shares", "views"], "auth": "Bearer read; OAuth 1.0a write", "constraints": "X API access/quota required; text publishing via Tweepy", **health("x")},
-                {"platform": "instagram", "configured": bool(settings.instagram_token and settings.instagram_user_id), "search": ["own account caption filter"], "metrics": ["likes", "comments"], "auth": "Facebook Login token + professional account", "constraints": "Own latest 50 posts only; query * lists all; single JPEG publishing", **health("instagram")},
+                {"platform": "x", "configured": bool(settings.x_bearer_token or settings.x_oauth_token), "search": ["keyword: last 7 days"], "metrics": ["likes", "comments", "shares", "views"], "auth": "X Login (OAuth 2.0 PKCE); legacy OAuth 1.0a supported", "constraints": "X API access/quota required; text publishing via Tweepy", **health("x")},
+                {"platform": "instagram", "configured": bool(settings.instagram_token and settings.instagram_user_id), "search": ["own account caption filter"], "metrics": ["likes", "comments"], "auth": settings.instagram_auth_mode + " Login + professional account", "constraints": "Own latest 50 posts only; query * lists all; single JPEG publishing", **health("instagram")},
                 {"platform": "public_video", "configured": settings.allow_public_urls, "search": ["explicit TikTok/YouTube URL"], "metrics": ["views", "likes", "comments", "shares", "author_followers"], "auth": "none; public permitted URLs only", "constraints": "Best effort; unavailable fields remain null; no access bypass", **health("public_video")}]}
 
     @app.get("/api/posts")

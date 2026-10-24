@@ -9,8 +9,8 @@ def validate_publication(settings, draft):
         if not settings.reddit_token or not draft.destination or draft.destination != settings.reddit_subreddit:
             raise ValueError('Configure Reddit token and matching subreddit first')
     elif draft.platform == 'x':
-        if not all((settings.x_api_key, settings.x_api_secret, settings.x_access_token, settings.x_access_token_secret, settings.x_user_id)):
-            raise ValueError('Configure X OAuth 1.0a credentials and user ID first')
+        if not (settings.x_user_id and (settings.x_oauth_token or all((settings.x_api_key, settings.x_api_secret, settings.x_access_token, settings.x_access_token_secret)))):
+            raise ValueError('Connect an X account first')
         if draft.destination != settings.x_user_id:
             raise ValueError('Destination must match configured X user ID')
         # Conservative weighted count: non-Latin characters count twice. Server is authoritative.
@@ -35,10 +35,11 @@ class XPublisher:
     def publish(self, draft):
         validate_publication(self.settings, draft)
         client = x_client(self.settings)
-        me = client.get_me(user_auth=True)
+        user_auth = not bool(self.settings.x_oauth_token)
+        me = client.get_me(user_auth=user_auth)
         if str(me.get('data', {}).get('id', '')) != draft.destination:
             raise ValueError('Authenticated X account differs from approved destination')
-        result = client.create_tweet(text=draft.text, user_auth=True)
+        result = client.create_tweet(text=draft.text, user_auth=user_auth)
         remote_id = str(result['data']['id'])
         return remote_id, 'https://x.com/i/web/status/' + remote_id
 

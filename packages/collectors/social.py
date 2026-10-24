@@ -7,7 +7,8 @@ from .base import Observation
 
 
 def x_client(settings):
-    return tweepy.Client(bearer_token=settings.x_bearer_token or None,
+    from packages.core.x_auth import access_token
+    return tweepy.Client(bearer_token=access_token(settings) or None,
                          consumer_key=settings.x_api_key or None,
                          consumer_secret=settings.x_api_secret or None,
                          access_token=settings.x_access_token or None,
@@ -33,7 +34,7 @@ class X:
                            definitions=fields, source='x_api_v2')
 
     def client(self):
-        if not self.settings.x_bearer_token:
+        if not (self.settings.x_bearer_token or self.settings.x_oauth_token):
             raise ValueError('X bearer token required for collection')
         return x_client(self.settings)
 
@@ -64,13 +65,13 @@ class Instagram:
     def request(self, method, path, **params):
         s = self.settings
         if not s.instagram_token or not s.instagram_user_id:
-            raise ValueError('Instagram professional account ID and Facebook Login token required')
+            raise ValueError('Instagram professional account ID and access token required')
         if not re.fullmatch(r'v\d+\.\d+', s.instagram_api_version):
             raise ValueError('Invalid Graph API version')
         if not re.fullmatch(r'\d+(?:/(?:media|media_publish))?', path):
             raise ValueError('Invalid Instagram API path')
         with httpx.Client(timeout=30) as client:
-            response = client.request(method, f'https://graph.facebook.com/{s.instagram_api_version}/{path}',
+            response = client.request(method, f'{"https://graph.instagram.com" if s.instagram_auth_mode == "instagram" else "https://graph.facebook.com"}/{s.instagram_api_version}/{path}',
                                       headers={'Authorization': 'Bearer ' + s.instagram_token},
                                       **({'params': params} if method == 'GET' else {'data': params}))
             response.raise_for_status()

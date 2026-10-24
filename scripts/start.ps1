@@ -20,4 +20,4 @@ if ($Check) {
 if (-not (Test-Path '.env')) { Copy-Item '.env.example' '.env' }
 & ./.venv/Scripts/python.exe -m alembic upgrade head
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
-& ./.venv/Scripts/python.exe -m uvicorn apps.api.main:app --host 127.0.0.1 --port 8765
+& ./.venv/Scripts/python.exe -m uvicorn apps.api.main:app --host 127.0.0.1 --port 8765 --no-access-log
