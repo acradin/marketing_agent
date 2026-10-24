@@ -1,65 +1,37 @@
 {
-  "checked_at": "2026-10-24T08:02:00.800663+00:00",
+  "checked_at": "2026-10-24T08:12:23.583676+00:00",
   "checks": [
     {
-      "name": "local_dashboard",
-      "status": "passed",
-      "result": {
-        "http_status": 200,
-        "meaning": "HTTP reachability only; not authenticated collection"
-      }
-    },
-    {
-      "name": "llm_network",
-      "status": "passed",
-      "result": {
-        "http_status": 401,
-        "meaning": "HTTP reachability only; not authenticated collection"
-      }
-    },
-    {
-      "name": "reddit_network",
-      "status": "passed",
-      "result": {
-        "http_status": 403,
-        "meaning": "HTTP reachability only; not authenticated collection"
-      }
-    },
-    {
-      "name": "youtube_network",
-      "status": "passed",
-      "result": {
-        "http_status": 403,
-        "meaning": "HTTP reachability only; not authenticated collection"
-      }
-    },
-    {
-      "name": "reddit_collection",
-      "status": "skipped",
-      "reason": "configuration_missing"
-    },
-    {
       "name": "youtube_collection",
-      "status": "skipped",
-      "reason": "configuration_missing"
+      "status": "passed",
+      "result": {
+        "posts": 1,
+        "urls": [
+          "https://www.youtube.com/watch?v=hdjuzIYqTr0"
+        ]
+      }
     },
     {
-      "name": "x_collection",
-      "status": "skipped",
-      "reason": "configuration_missing"
+      "name": "liner_authentication",
+      "status": "passed",
+      "result": {
+        "http_status": 200
+      }
     },
     {
-      "name": "instagram_collection",
-      "status": "skipped",
-      "reason": "configuration_missing"
-    },
-    {
-      "name": "llm_schema_analysis",
-      "status": "skipped",
-      "reason": "configuration_missing"
+      "name": "liner_analysis_and_generation",
+      "status": "passed",
+      "result": {
+        "analysis_schema_valid": true,
+        "generation_schema_valid": true,
+        "generated_characters": 60
+      }
     }
   ],
+  "reddit": "paused_by_user",
+  "x_and_instagram": "not_configured",
   "publication_attempted": false,
   "database_modified": false,
-  "note": "Zero returned posts is not proof of successful post ingestion. LLM probe uses synthetic text; generation is not tested."
+  "liner_json_mode": false,
+  "compatibility_note": "response_format=json_object returned HTTP 400; omitted with local schema validation retained"
 }

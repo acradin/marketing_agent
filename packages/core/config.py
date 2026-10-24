@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="VE_", env_file=".env", extra="ignore")
     database_url: str = "sqlite:///./data/viral.db"
     llm_base_url: str = "https://api.openai.com/v1"
+    llm_json_mode: bool = True
     llm_api_key: str = ""
     llm_model: str = "gpt-4.1-mini"
     reddit_token: str = ""
